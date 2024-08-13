@@ -1,6 +1,6 @@
 {
-    "name": "pl_watch",
-    "short_name": "pl_watch",
+    "name": "legisTrack",
+    "short_name": "legisTrack",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

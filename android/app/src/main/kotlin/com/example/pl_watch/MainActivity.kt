@@ -1,4 +1,4 @@
-package com.example.pl_watch
+package com.example.legisTrack
 
 import io.flutter.embedding.android.FlutterActivity
 

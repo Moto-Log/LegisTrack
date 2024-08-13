@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:pl_watch/models/project.dart';// assuming you have a Project model in a separate file
+import 'package:legisTrack/models/project.dart';// assuming you have a Project model in a separate file
 
 class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});

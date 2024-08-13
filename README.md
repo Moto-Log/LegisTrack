@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # legisTrack
+=======
+# LegisTrack
+>>>>>>> b86f311fea462a7987d6b1ae549ebcbcd625dc09
 
 A new Flutter project.
 

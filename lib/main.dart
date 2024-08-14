@@ -172,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   }
                 },
-                style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(225, 255, 235, 59))),
+                style: ButtonStyle(shape: WidgetStatePropertyAll( RoundedRectangleBorder( borderRadius: BorderRadius.all(Radius.circular(12)))), backgroundColor: WidgetStateProperty.all(const Color.fromARGB(225, 255, 235, 59))),
                 child: Text('Entrar', style: TextStyle( color: Colors.white)),
               ),
               SizedBox(height: 10),

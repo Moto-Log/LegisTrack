@@ -23,18 +23,19 @@ class ProjectsScreenState extends State<ProjectsScreen> {
 
   Future<void> _loadProjects() async {
     // Carregar a lista de projetos de lei da API da Câmara - Bugado no momento
-    // final response = await http.get(Uri.parse('https://api.camara.leg.br/...'));
-    // final jsonData = jsonDecode(response.body);
-    // _projects = jsonData.map((project) => Project.fromJson(project)).toList();
-    // _filteredProjects = _projects;
+    final response = await http.get(Uri.parse('https://dadosabertos.camara.leg.br/api/v2/proposicoes?ordem=DESC&ordenarPor=id'));
+    final jsonData = jsonDecode(response.body);
+    var data = jsonData['dados'];
+    _projects = data.map<Project>((project) => Project.fromJson(project)).toList();
+    _filteredProjects = _projects;
     setState(() {});
   }
 
   void _searchProjects(String query) {
     _filteredProjects = _projects.where((project) {
       return project.ementa.toLowerCase().contains(query.toLowerCase()) ||
-            project.apelido.toLowerCase().contains(query.toLowerCase()) ||
-            project.palavrasChave.toLowerCase().contains(query.toLowerCase());
+            project.siglaTipo.toLowerCase().contains(query.toLowerCase()) ||
+            project.ano.toString().toLowerCase().contains(query.toLowerCase());
     }).toList();
     setState(() {});
   }
@@ -70,26 +71,10 @@ class ProjectsScreenState extends State<ProjectsScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(project.ementa),
-                        Text(project.apelido),
                         Text('Sigla Tipo: ${project.siglaTipo}'),
-                        Text('Número: ${project.numero}'),
-                        Text('Ano: ${project.ano}'),
-                        Text('Palavras Chave: ${project.palavrasChave}'),
-                        Text('Assunto: ${project.assunto}'),
-                        Text('Situação: ${project.situacao}'),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Data Situação: ${project.dataSituacao}'),
-                            Text('Data Publicação: ${project.dataPublicacao}'),
-                            IconButton(
-                              icon: const Icon(Icons.favorite),
-                              onPressed: () {
-                                // Marcar como favorito
-                              },
-                            ),
-                          ],
-                        ),
+                        Text('Número: ${project.numero.toString()}'),
+                        Text('Ano: ${project.ano.toString()}'),
+                        Text('Sigla: ${project.siglaTipo}')
                       ],
                     ),
                   ),

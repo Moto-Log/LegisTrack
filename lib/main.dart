@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CadastroPage()),
+                    MaterialPageRoute(builder: (context) => PaginaCadastro()),
                   );
                 },
                 child: const Align(
@@ -200,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
 
-class CadastroPage extends StatelessWidget {
+/*class CadastroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -212,4 +212,4 @@ class CadastroPage extends StatelessWidget {
       ),
     );
   }
-}
+}*/

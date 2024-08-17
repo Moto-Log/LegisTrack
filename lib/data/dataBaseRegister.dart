@@ -7,15 +7,22 @@ import 'dart:io';
 class ValorModel {
   final String nome;
   final String idade;
+  final String cpf;
   final String email;
   final String senha;
 
-  ValorModel({required this.nome, required this.idade, required this.email, required this.senha});
+  ValorModel(
+      {required this.nome,
+      required this.idade,
+      required this.cpf,
+      required this.email,
+      required this.senha});
 
   Map<String, dynamic> toMap() {
     return {
       'nome': nome,
       'idade': idade,
+      'cpf': cpf,
       'email': email,
       'senha': senha,
     };
@@ -40,7 +47,7 @@ class DbHelper {
 
   Future<Database> _initDb() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'mydatabase.db');
+    String path = join(documentsDirectory.path, 'databaseregister.db');
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
@@ -50,6 +57,7 @@ class DbHelper {
         id INTEGER PRIMARY KEY,
         nome TEXT NOT NULL,
         idade TEXT NOT NULL,
+        cpf TEXT NOT NULL,
         email TEXT NOT NULL,
         senha TEXT NOT NULL
       )
@@ -69,7 +77,8 @@ class DbHelper {
   Future<int> update(Map<String, dynamic> row) async {
     Database db = await database;
     int id = row['id'];
-    return await db.update('RegisterUser', row, where: 'id = ?', whereArgs: [id]);
+    return await db
+        .update('RegisterUser', row, where: 'id = ?', whereArgs: [id]);
   }
 
   Future<int> delete(int id) async {
@@ -78,9 +87,15 @@ class DbHelper {
   }
 }
 
-Future<void> adicionarValores(String nome, String idade, String email, String senha) async {
-  if (nome.isNotEmpty && idade.isNotEmpty && email.isNotEmpty && senha.isNotEmpty) {
-    final valorModel = ValorModel(nome: nome, idade: idade, email: email, senha: senha);
+Future<void> adicionarValores(
+    String nome, String idade, String cpf, String email, String senha) async {
+  if (nome.isNotEmpty &&
+      idade.isNotEmpty &&
+      cpf.isNotEmpty &&
+      email.isNotEmpty &&
+      senha.isNotEmpty) {
+    final valorModel =
+        ValorModel(nome: nome, idade: idade, cpf: cpf, email: email, senha: senha);
     final dbHelper = DbHelper();
     await dbHelper.insert(valorModel.toMap());
   } else {

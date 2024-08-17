@@ -1,12 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:legisTrack/main.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../../data/dataBaseRegister.dart';
 import '../dialogue/popUp.dart';
+import '../login/login.dart';
+import '../validation/validateCpf.dart';
 
 class PaginaCadastro extends StatefulWidget {
   const PaginaCadastro({super.key});
@@ -18,12 +18,31 @@ class PaginaCadastro extends StatefulWidget {
 class _PaginaCadastroState extends State<PaginaCadastro> {
   final TextEditingController _controllerNome = TextEditingController();
   final TextEditingController _controllerIdade = TextEditingController();
+  final TextEditingController _controllerCpf = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerSenha = TextEditingController();
 
-  Future<void> adicionarValores(String nome, String idade, String email, String senha) async {
-    if (nome.isNotEmpty && idade.isNotEmpty && email.isNotEmpty && senha.isNotEmpty) {
-      final valorModel = ValorModel(nome: nome, idade: idade, email: email, senha: senha);
+  bool _isNomeValid = true;
+  bool _isCpfValid = true;
+  bool _isIdadeValid = true;
+  bool _isEmailValid = true;
+  bool _isSenhaValid = true;
+
+  void _validateCpf() {
+    setState(() {
+      _isCpfValid = isValidCpf(_controllerCpf.text);
+    });
+  }
+
+  Future<void> adicionarValores(
+      String nome, String idade, String cpf, String email, String senha) async {
+    if (nome.isNotEmpty &&
+        idade.isNotEmpty &&
+        cpf.isNotEmpty &&
+        email.isNotEmpty &&
+        senha.isNotEmpty) {
+      final valorModel = ValorModel(
+          nome: nome, idade: idade, cpf: cpf, email: email, senha: senha);
       final dbHelper = DbHelper();
       await dbHelper.insert(valorModel.toMap());
     } else {
@@ -31,19 +50,15 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
     }
   }
 
-  /*Future<void> adicionarValores(
-      String nome, String idade, String email, String senha) async {
-    if (nome.isNotEmpty) {
-      final valorModel =
-          ValorModel(nome: nome, idade: idade, email: email, senha: senha);
-      await DatabaseCadastro.instance;
-    }
-  }*/
-
   bool _showPassword = false;
 
-  final maskFormatter = MaskTextInputFormatter(
+  final maskFormatterIdade = MaskTextInputFormatter(
     mask: '##/##/####',
+    filter: {'#': RegExp(r'[0-9]')},
+  );
+
+  final maskFormatterCpf = MaskTextInputFormatter(
+    mask: '###.###.###-##',
     filter: {'#': RegExp(r'[0-9]')},
   );
 
@@ -54,6 +69,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
 
   String get nomeRecebido => _controllerNome.text;
   String get idadeRecebido => _controllerIdade.text;
+  String get cpfRecebido => _controllerCpf.text;
   String get emailRecebido => _controllerEmail.text;
   String get senhaRecebido => _controllerSenha.text;
 
@@ -64,7 +80,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
       final allRows = await dbHelper.queryAllRows();
       allRows.forEach((row) {
         print(
-            'ID: ${row['id']}, Nome: ${row['nome']}, Idade: ${row['idade']}, Email: ${row['email']}, Senha: ${row['senha']}');
+            'ID: ${row['id']}, Nome: ${row['nome']}, Idade: ${row['idade']}, CPF: ${row['cpf']}, Email: ${row['email']}, Senha: ${row['senha']}');
       });
     }
 
@@ -81,6 +97,16 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                 //CHAMANDO A CLASSE PARA TITULO DA PAGINA
                 //MeuTextoCadastro(),
                 //SizedBox(height: 16),
+                RichText(
+                  text: TextSpan(
+                    text: 'Cadastro',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 48,
+                    ),
+                  ),
+                ),
 
                 //CAMPO NOME
                 TextField(
@@ -99,13 +125,24 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                       fontSize: 18,
                       color: Colors.black,
                     ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: _isNomeValid ? Colors.grey : Colors.red,
+                          width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: _isNomeValid ? Colors.grey : Colors.red,
+                        width: 2.0,
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 16),
 
                 //CAMPO IDADE
                 TextField(
-                  inputFormatters: [maskFormatter],
+                  inputFormatters: [maskFormatterIdade],
                   keyboardType: TextInputType.number,
                   controller: _controllerIdade,
                   decoration: InputDecoration(
@@ -122,7 +159,59 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                       fontSize: 18,
                       color: Colors.black,
                     ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: _isIdadeValid ? Colors.grey : Colors.red,
+                          width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: _isIdadeValid ? Colors.grey : Colors.red,
+                        width: 2.0,
+                      ),
+                    ),
                   ),
+                ),
+                SizedBox(height: 16),
+
+                //CAMPO CPF
+                TextField(
+                  inputFormatters: [maskFormatterCpf],
+                  keyboardType: TextInputType.number,
+                  controller: _controllerCpf,
+                  decoration: InputDecoration(
+                    labelText: 'Cpf',
+                    hintText: 'Informe seu Cpf',
+                    prefixIcon: Icon(Icons.call_to_action_outlined),
+                    filled: true,
+                    fillColor: Color.fromARGB(255, 233, 232, 232),
+                    labelStyle: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                    hintStyle: TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: _isCpfValid ? Colors.grey : Colors.red,
+                          width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: _isCpfValid ? Colors.grey : Colors.red,
+                        width: 2.0,
+                      ),
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      if (value.isEmpty) {
+                        _isCpfValid = true;
+                      }
+                    });
+                  },
                 ),
                 SizedBox(height: 16),
 
@@ -142,6 +231,17 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                     hintStyle: TextStyle(
                       fontSize: 18,
                       color: Colors.black,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: _isEmailValid ? Colors.grey : Colors.red,
+                          width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: _isEmailValid ? Colors.grey : Colors.red,
+                        width: 2.0,
+                      ),
                     ),
                   ),
                 ),
@@ -175,6 +275,17 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                       fontSize: 18,
                       color: Colors.black,
                     ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: _isSenhaValid ? Colors.grey : Colors.red,
+                          width: 2.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: _isSenhaValid ? Colors.grey : Colors.red,
+                        width: 2.0,
+                      ),
+                    ),
                   ),
                 ),
                 SizedBox(height: 16),
@@ -182,39 +293,50 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                 //BOTAO CADASTRAR
                 ElevatedButton(
                   onPressed: () {
+                    _validateCpf();
                     if (nomeRecebido.isEmpty ||
                         idadeRecebido.isEmpty ||
+                        cpfRecebido.isEmpty ||
                         emailRecebido.isEmpty ||
                         senhaRecebido.isEmpty) {
                       //DatabaseCadastro.instance.closeDatabase();
                       print("Todos os Campos são obrigatorios.");
                     } else {
-                      adicionarValores(
-                        nomeRecebido,
-                        idadeRecebido,
-                        emailRecebido,
-                        senhaRecebido,
-                      );
-
-                      //ABRE UMA CAIXA (POPUP)
-                      Dialogo dialogo = Dialogo(context);
-                      dialogo.openDialog();
-                      Timer(Duration(seconds: 1), () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => LoginPage(),
-                          ),
+                      if (_isCpfValid) {
+                        adicionarValores(
+                          nomeRecebido,
+                          idadeRecebido,
+                          cpfRecebido,
+                          emailRecebido,
+                          senhaRecebido,
                         );
-                      });
 
-                      //LIMPA OS CAMPOS
-                      _controllerNome.clear();
-                      _controllerIdade.clear();
-                      _controllerEmail.clear();
-                      _controllerSenha.clear();
+                        //ABRE UMA CAIXA (POPUP)
+                        Dialogo dialogo = Dialogo(context);
+                        dialogo.openDialog();
+                        Timer(Duration(seconds: 1), () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LoginPage(),
+                            ),
+                          );
+                        });
 
-                      printDatabaseValues();
+                        //LIMPA OS CAMPOS
+                        _controllerNome.clear();
+                        _controllerIdade.clear();
+                        _controllerCpf.clear();
+                        _controllerEmail.clear();
+                        _controllerSenha.clear();
+
+                        printDatabaseValues();
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Dados Inválidos')),
+                        );
+                      }
+                      ;
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -222,6 +344,28 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   ),
                   child: Text(
                     'Cadastrar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+
+                //BOTAO LOGIN
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                        builder: (context) => LoginPage(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 49, 46, 46),
+                  ),
+                  child: Text(
+                    'Já Tenho Conta',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

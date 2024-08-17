@@ -1,4 +1,4 @@
-package com.example.legisTrack
+package br.com.XFac.legistrack
 
 import io.flutter.embedding.android.FlutterActivity
 

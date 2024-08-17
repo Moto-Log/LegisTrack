@@ -1,4 +1,4 @@
-# legisTrack
+# legistrack
 
 A new Flutter project.
 

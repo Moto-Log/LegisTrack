@@ -5,25 +5,25 @@ plugins {
     id "dev.flutter.flutter-gradle-plugin"
 }
 
-def keystoreProperties = new Properties()
+/*def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-}
+}*/
 
 android {
     namespace = "br.com.XFac.legistrack"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
-    signingConfigs {
+    /*signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
         }
-    }
+    }*/
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -45,14 +45,14 @@ android {
         versionName = flutter.versionName
     }
 
-    buildTypes {
+    /*buildTypes {
         release {
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
+    }*/
 }
 
 flutter {

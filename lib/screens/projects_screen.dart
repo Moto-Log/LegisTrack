@@ -1,7 +1,7 @@
 /*import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:legisTrack/models/project.dart';// assuming you have a Project model in a separate file
+import 'package:legistrack/models/project.dart';// assuming you have a Project model in a separate file
 
 class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});
@@ -91,7 +91,7 @@ class ProjectsScreenState extends State<ProjectsScreen> {
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:legisTrack/models/project.dart'; // assumindo que você tem um modelo Project em um arquivo separado
+import 'package:legistrack/models/project.dart'; // assumindo que você tem um modelo Project em um arquivo separado
 
 class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:legisTrack/data/dataBaseRegister.dart';
+import 'package:legistrack/data/dataBaseRegister.dart';
 
 import '../../validators.dart';
 import '../projects_screen.dart';

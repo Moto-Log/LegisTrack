@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:legistrack/data/dataBaseRegister.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import '../../validators.dart';
+import '../validation/validators.dart';
 import '../projects_screen.dart';
 import '../register/screen_register.dart';
 
@@ -23,6 +23,11 @@ class _LoginPageState extends State<LoginPage> {
   //final _controllers = [TextEditingController(), TextEditingController()];
   final _focusNodes = [FocusNode(), FocusNode()];
   final _scrollController = ScrollController();
+
+  final maskFormatterCpf = MaskTextInputFormatter(
+    mask: '###.###.###-##',
+    filter: {'#': RegExp(r'[0-9]')},
+  );
 
   @override
   void initState() {
@@ -48,12 +53,12 @@ class _LoginPageState extends State<LoginPage> {
   void _scrollToNode(FocusNode node) {
     _scrollController.animateTo(
       node.offset.dy,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
       curve: Curves.ease,
     );
   }
 
-  Future<bool> _compareValue() async {
+  Future<String> _compareValue() async {
     final cpfValue = _controllerCpf.text;
     final senhaValue = _controllerSenha.text;
     try {
@@ -61,15 +66,15 @@ class _LoginPageState extends State<LoginPage> {
       final List<Map<String, dynamic>> maps = await dbHelper.queryAllRows();
       for (var map in maps) {
         if (map['cpf'] == cpfValue && map['senha'] == senhaValue) {
-          print('Valor encontrado no banco de dados!');
-          return true;
+          // print('Valor encontrado no banco de dados!');
+          return "Found";
         }
       }
-      print('Valor não encontrado');
-      return false;
+      // print('Valor não encontrado');
+      return "Usuário não cadastrado!";
     } catch (e) {
-      print('Erro ao acessar o banco de dados: $e');
-      return false;
+      // print('Erro ao acessar o banco de dados: $e');
+      return "Erro ao acessar o banco de dados: $e";
     }
   }
 
@@ -80,8 +85,8 @@ class _LoginPageState extends State<LoginPage> {
             controller: _scrollController,
             child: Column(children: [
               Container(
-                  margin: EdgeInsets.only(top: 50), // Set the margin here
-                  child: FractionallySizedBox(
+                  margin: const EdgeInsets.only(top: 50), // Set the margin here
+                  child: const FractionallySizedBox(
                       widthFactor: 0.7,
                       child: Image(
                           image: AssetImage('src/archives/login_img.png')))),
@@ -91,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                   key: _formKey,
                   child: Column(
                     children: [
-                      Align(
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Login',
@@ -101,8 +106,8 @@ class _LoginPageState extends State<LoginPage> {
                               fontWeight: FontWeight.bold),
                         ),
                       ),
-                      SizedBox(height: 20),
-                      Align(
+                      const SizedBox(height: 20),
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           'CPF',
@@ -114,9 +119,10 @@ class _LoginPageState extends State<LoginPage> {
                         keyboardType: TextInputType.number,
                         controller: _controllerCpf,
                         focusNode: _focusNodes[0],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
+                        autovalidateMode: AutovalidateMode.onUnfocus,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Por favor, insira seu CPF';
@@ -126,14 +132,11 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           return null;
                         },
-                        onSaved: (value) => _controllerCpf.text = value!,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          CpfInputFormatter(),
-                        ],
+                        onChanged: (value) => _controllerCpf.text = value,
+                        inputFormatters: [maskFormatterCpf],
                       ),
-                      SizedBox(height: 20),
-                      Align(
+                      const SizedBox(height: 20),
+                      const Align(
                         alignment: Alignment.topLeft,
                         child: Text(
                           'Senha',
@@ -145,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                         controller: _controllerSenha,
                         focusNode: _focusNodes[1],
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(),
+                            border: const OutlineInputBorder(),
                             suffixIcon: IconButton(
                                 onPressed: () {
                                   setState(() {
@@ -162,20 +165,37 @@ class _LoginPageState extends State<LoginPage> {
                           }
                           return null;
                         },
-                        onSaved: (value) => _controllerSenha.text = value!,
+                        autovalidateMode: AutovalidateMode.onUnfocus,
+                        onChanged: (value) => _controllerSenha.text = value,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () async {
-                          bool valueFound = await _compareValue();
-                          if (valueFound) {
+                          String valueFound = await _compareValue();
+                          if (valueFound == "Found") {
                             _controllerCpf.clear();
                             _controllerSenha.clear();
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ProjectsScreen()),
+                                  builder: (context) => const ProjectsScreen()),
                             );
+                          }
+                          else {
+                            showDialog(context: context, builder: (BuildContext build) {
+                              return AlertDialog(
+                                title: const Text('Aviso!'),
+                                content: Text(valueFound),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            });
                           }
                           /*if (_formKey.currentState!.validate()) {
                             _formKey.currentState!.save();
@@ -187,22 +207,22 @@ class _LoginPageState extends State<LoginPage> {
                           }*/
                         },
                         style: ButtonStyle(
-                            shape: WidgetStatePropertyAll(
+                            shape: const WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(12)))),
                             backgroundColor: WidgetStateProperty.all(
                                 const Color.fromARGB(225, 255, 235, 59))),
-                        child: Text('Entrar',
+                        child: const Text('Entrar',
                             style: TextStyle(color: Colors.white)),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       TextButton(
                           onPressed: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PaginaCadastro()),
+                                  builder: (context) => const PaginaCadastro()),
                             );
                           },
                           child: const Align(

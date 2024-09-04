@@ -6,7 +6,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import '../../data/dataBaseRegister.dart';
 import '../dialogue/popUp.dart';
 import '../login/login.dart';
-import '../validation/validateCpf.dart';
+import '../validation/validators.dart';
 
 class PaginaCadastro extends StatefulWidget {
   const PaginaCadastro({super.key});
@@ -22,15 +22,15 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerSenha = TextEditingController();
 
-  bool _isNomeValid = true;
+  final bool _isNomeValid = true;
   bool _isCpfValid = true;
-  bool _isIdadeValid = true;
-  bool _isEmailValid = true;
-  bool _isSenhaValid = true;
+  final bool _isIdadeValid = true;
+  final bool _isEmailValid = true;
+  final bool _isSenhaValid = true;
 
   void _validateCpf() {
     setState(() {
-      _isCpfValid = isValidCpf(_controllerCpf.text);
+      _isCpfValid = validations.isValidCpf(_controllerCpf.text);
     });
   }
 
@@ -64,7 +64,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
 
   final OutlineInputBorder customBorder = OutlineInputBorder(
     borderRadius: BorderRadius.circular(50),
-    borderSide: BorderSide(color: Colors.black),
+    borderSide: const BorderSide(color: Colors.black),
   );
 
   String get nomeRecebido => _controllerNome.text;
@@ -85,7 +85,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
     }
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -98,7 +98,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                 //MeuTextoCadastro(),
                 //SizedBox(height: 16),
                 RichText(
-                  text: TextSpan(
+                  text: const TextSpan(
                     text: 'Cadastro',
                     style: TextStyle(
                       color: Colors.black,
@@ -114,14 +114,14 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Nome',
                     hintText: 'Digite seu Nome',
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: const Icon(Icons.person),
                     filled: true,
                     fillColor: const Color.fromARGB(255, 233, 232, 232),
-                    labelStyle: TextStyle(
+                    labelStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
@@ -138,7 +138,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 //CAMPO IDADE
                 TextField(
@@ -148,14 +148,14 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Idade',
                     hintText: 'Digite sua idade',
-                    prefixIcon: Icon(Icons.calendar_month),
+                    prefixIcon: const Icon(Icons.calendar_month),
                     filled: true,
-                    fillColor: Color.fromARGB(255, 233, 232, 232),
-                    labelStyle: TextStyle(
+                    fillColor: const Color.fromARGB(255, 233, 232, 232),
+                    labelStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
@@ -172,7 +172,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 //CAMPO CPF
                 TextField(
@@ -182,14 +182,14 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Cpf',
                     hintText: 'Informe seu Cpf',
-                    prefixIcon: Icon(Icons.call_to_action_outlined),
+                    prefixIcon: const Icon(Icons.call_to_action_outlined),
                     filled: true,
-                    fillColor: Color.fromARGB(255, 233, 232, 232),
-                    labelStyle: TextStyle(
+                    fillColor: const Color.fromARGB(255, 233, 232, 232),
+                    labelStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
@@ -213,7 +213,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                     });
                   },
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 //CAMPO EMAIL
                 TextField(
@@ -221,14 +221,14 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'E-mail',
                     hintText: 'seuemail@email.com',
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: const Icon(Icons.email),
                     filled: true,
-                    fillColor: Color.fromARGB(255, 233, 232, 232),
-                    labelStyle: TextStyle(
+                    fillColor: const Color.fromARGB(255, 233, 232, 232),
+                    labelStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
@@ -245,7 +245,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 //CAMPO SENHA
                 TextField(
@@ -254,7 +254,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   decoration: InputDecoration(
                     labelText: 'Senha',
                     hintText: 'Digite sua senha',
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
                       icon: Icon(_showPassword
                           ? Icons.visibility
@@ -266,12 +266,12 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                       },
                     ),
                     filled: true,
-                    fillColor: Color.fromARGB(255, 233, 232, 232),
-                    labelStyle: TextStyle(
+                    fillColor: const Color.fromARGB(255, 233, 232, 232),
+                    labelStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       fontSize: 18,
                       color: Colors.black,
                     ),
@@ -288,7 +288,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
 
                 //BOTAO CADASTRAR
                 ElevatedButton(
@@ -300,7 +300,20 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                         emailRecebido.isEmpty ||
                         senhaRecebido.isEmpty) {
                       //DatabaseCadastro.instance.closeDatabase();
-                      print("Todos os Campos são obrigatorios.");
+                      showDialog(context: context, builder: (BuildContext build) {
+                        return AlertDialog(
+                          title: const Text('Aviso!'),
+                          content: const Text('Todos os campos devem estar preenchidos'),
+                          actions: [
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      });
                     } else {
                       if (_isCpfValid) {
                         adicionarValores(
@@ -314,7 +327,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                         //ABRE UMA CAIXA (POPUP)
                         Dialogo dialogo = Dialogo(context);
                         dialogo.openDialog();
-                        Timer(Duration(seconds: 1), () {
+                        Timer(const Duration(seconds: 1), () {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
@@ -333,7 +346,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                         printDatabaseValues();
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Dados Inválidos')),
+                          const SnackBar(content: Text('Dados Inválidos')),
                         );
                       }
                       ;
@@ -342,7 +355,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                   ),
-                  child: Text(
+                  child: const Text(
                     'Cadastrar',
                     style: TextStyle(
                       color: Colors.white,
@@ -364,7 +377,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 49, 46, 46),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Já Tenho Conta',
                     style: TextStyle(
                       color: Colors.white,

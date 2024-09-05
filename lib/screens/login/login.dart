@@ -16,11 +16,8 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerSenha = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-  //String _cpf = '';
-  //String _senha = '';
   bool _obscureText = true;
 
-  //final _controllers = [TextEditingController(), TextEditingController()];
   final _focusNodes = [FocusNode(), FocusNode()];
   final _scrollController = ScrollController();
 
@@ -71,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       }
       // print('Valor não encontrado');
-      return "Usuário não cadastrado!";
+      return "Usuário e/ou senha inválidos!";
     } catch (e) {
       // print('Erro ao acessar o banco de dados: $e');
       return "Erro ao acessar o banco de dados: $e";

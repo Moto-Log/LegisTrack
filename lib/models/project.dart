@@ -1,3 +1,5 @@
+import 'package:legistrack/models/status_proposicao.dart';
+
 class Project {
   final int id;
   final String uri;
@@ -6,6 +8,7 @@ class Project {
   final int numero;
   final int ano;
   final String ementa;
+  final StatusProposicao? statusProposicao;
 
   Project({
     required this.id,
@@ -14,7 +17,8 @@ class Project {
     required this.codTipo,
     required this.numero,
     required this.ano,
-    required this.ementa
+    required this.ementa,
+    required this.statusProposicao
   });
 
   factory Project.fromJson(Map<String, dynamic> json) {
@@ -25,7 +29,10 @@ class Project {
       codTipo: json['codTipo'],
       numero: json['numero'],
       ano: json['ano'],
-      ementa: json['ementa']
+      ementa: json['ementa'],
+      statusProposicao: json['statusProposicao'] != null
+      ? StatusProposicao.fromJson(json['statusProposicao'])
+      : null
     );
   }
 }

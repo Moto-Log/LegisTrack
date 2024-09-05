@@ -6,7 +6,7 @@ class Dialogo {
   Dialogo(this.context);
 
   //FUNÇÃO PARA ABRIR O POP-UP
-  Future openDialog() => showDialog(
+  Future dialogCadastro() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Column(

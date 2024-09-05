@@ -326,7 +326,7 @@ class _PaginaCadastroState extends State<PaginaCadastro> {
 
                         //ABRE UMA CAIXA (POPUP)
                         Dialogo dialogo = Dialogo(context);
-                        dialogo.openDialog();
+                        dialogo.dialogCadastro();
                         Timer(const Duration(seconds: 1), () {
                           Navigator.pushReplacement(
                             context,

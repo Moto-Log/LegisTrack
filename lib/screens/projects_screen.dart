@@ -91,7 +91,8 @@ class ProjectsScreenState extends State<ProjectsScreen> {
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:legistrack/models/project.dart'; // assumindo que você tem um modelo Project em um arquivo separado
+import 'package:legistrack/models/project.dart';
+import 'package:legistrack/screens/project_screen.dart';
 
 class ProjectsScreen extends StatefulWidget {
   const ProjectsScreen({super.key});
@@ -185,7 +186,11 @@ class ProjectsScreenState extends State<ProjectsScreen> {
                 Project project = _filteredProjects[index];
                 return GestureDetector(
                   onTap: () {
-                    _showProjectDialog(project);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProjectScreen(project.id)),
+                    );
                   },
                   child: Card(
                     child: Padding(

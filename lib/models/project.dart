@@ -2,37 +2,46 @@ import 'package:legistrack/models/status_proposicao.dart';
 
 class Project {
   final int id;
-  final String uri;
   final String siglaTipo;
-  final int codTipo;
-  final int numero;
-  final int ano;
+  final String numero;
+  final String ano;
   final String ementa;
+  final String apelido;
   final StatusProposicao? statusProposicao;
 
   Project({
     required this.id,
-    required this.uri,
     required this.siglaTipo,
-    required this.codTipo,
     required this.numero,
     required this.ano,
     required this.ementa,
-    required this.statusProposicao
+    required this.apelido,
+    this.statusProposicao,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(
       id: json['id'],
-      uri: json['uri'],
-      siglaTipo: json['siglaTipo'],
-      codTipo: json['codTipo'],
-      numero: json['numero'],
-      ano: json['ano'],
-      ementa: json['ementa'],
+      siglaTipo: json['siglaTipo']?.toString() ?? '', // Garantir String
+      numero: json['numero']?.toString() ?? '',       // Garantir String
+      ano: json['ano']?.toString() ?? '',             // Garantir String
+      ementa: json['ementa'] ?? '',
+      apelido: json['apelido'] ?? '',
       statusProposicao: json['statusProposicao'] != null
-      ? StatusProposicao.fromJson(json['statusProposicao'])
-      : null
+          ? StatusProposicao.fromJson(json['statusProposicao'])
+          : null,
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'siglaTipo': siglaTipo,
+      'numero': numero,
+      'ano': ano,
+      'ementa': ementa,
+      'apelido': apelido,
+      'statusProposicao': statusProposicao?.toJson(),
+    };
   }
 }

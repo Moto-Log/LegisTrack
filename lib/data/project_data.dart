@@ -1,3 +1,4 @@
+// Modelo de dados para representar um Projeto de Lei
 class Project {
   final int id;
   final String siglaTipo;
@@ -55,34 +56,35 @@ class Project {
     required this.dataUltimaAlteracao,
   });
 
+  // Método de fábrica para criar uma instância de Project a partir de um JSON
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(
       id: json['id'],
-      siglaTipo: json['siglaTipo'],
-      numero: json['numero'],
-      ano: json['ano'],
-      ementa: json['ementa'],
-      apelido: json['apelido'],
-      uri: json['uri'],
-      uriDetalhe: json['uriDetalhe'],
-      uriAutoria: json['uriAutoria'],
-      uriTramitacao: json['uriTramitacao'],
-      uriVotacao: json['uriVotacao'],
-      uriAvaliacao: json['uriAvaliacao'],
-      uriDocumento: json['uriDocumento'],
-      palavrasChave: json['palavrasChave'],
-      assunto: json['assunto'],
-      situacao: json['situacao'],
-      uriSituacao: json['uriSituacao'],
-      dataSituacao: json['dataSituacao'],
-      parecer: json['parecer'],
-      uriParecer: json['uriParecer'],
-      dataParecer: json['dataParecer'],
-      dataPublicacao: json['dataPublicacao'],
-      dataRecebimento: json['dataRecebimento'],
-      dataEntrada: json['dataEntrada'],
-      dataPrevista: json['dataPrevista'],
-      dataUltimaAlteracao: json['dataUltimaAlteracao'],
+      siglaTipo: json['siglaTipo'] ?? '', // Usa valor padrão caso o dado seja nulo
+      numero: json['numero'] ?? '',
+      ano: json['ano'] ?? '',
+      ementa: json['ementa'] ?? '',
+      apelido: json['apelido'] ?? '',
+      uri: json['uri'] ?? '',
+      uriDetalhe: json['uriDetalhe'] ?? '',
+      uriAutoria: json['uriAutoria'] ?? '',
+      uriTramitacao: json['uriTramitacao'] ?? '',
+      uriVotacao: json['uriVotacao'] ?? '',
+      uriAvaliacao: json['uriAvaliacao'] ?? '',
+      uriDocumento: json['uriDocumento'] ?? '',
+      palavrasChave: json['palavrasChave'] ?? '',
+      assunto: json['assunto'] ?? '',
+      situacao: json['situacao'] ?? '',
+      uriSituacao: json['uriSituacao'] ?? '',
+      dataSituacao: json['dataSituacao'] ?? '',
+      parecer: json['parecer'] ?? '',
+      uriParecer: json['uriParecer'] ?? '',
+      dataParecer: json['dataParecer'] ?? '',
+      dataPublicacao: json['dataPublicacao'] ?? '',
+      dataRecebimento: json['dataRecebimento'] ?? '',
+      dataEntrada: json['dataEntrada'] ?? '',
+      dataPrevista: json['dataPrevista'] ?? '',
+      dataUltimaAlteracao: json['dataUltimaAlteracao'] ?? '',
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'dart:async';
 import 'dart:io';
 
+// Modelo de dados para um usuário
 class ValorModel {
   final String nome;
   final String idade;
@@ -11,13 +12,15 @@ class ValorModel {
   final String email;
   final String senha;
 
-  ValorModel(
-      {required this.nome,
-      required this.idade,
-      required this.cpf,
-      required this.email,
-      required this.senha});
+  ValorModel({
+    required this.nome,
+    required this.idade,
+    required this.cpf,
+    required this.email,
+    required this.senha,
+  });
 
+  // Converte o objeto para um Map para facilitar a inserção no banco de dados
   Map<String, dynamic> toMap() {
     return {
       'nome': nome,
@@ -29,6 +32,7 @@ class ValorModel {
   }
 }
 
+// Classe que gerencia o banco de dados
 class DbHelper {
   static final DbHelper _dbHelper = DbHelper._internal();
   static Database? _database;
@@ -39,18 +43,26 @@ class DbHelper {
 
   DbHelper._internal();
 
+  // Inicializa o banco de dados
   Future<Database> get database async {
     if (_database != null) return _database!;
     _database = await _initDb();
     return _database!;
   }
 
+  // Cria o banco de dados e define sua estrutura
   Future<Database> _initDb() async {
-    Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, 'databaseregister.db');
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    try {
+      Directory documentsDirectory = await getApplicationDocumentsDirectory();
+      String path = join(documentsDirectory.path, 'databaseregister.db');
+      return await openDatabase(path, version: 1, onCreate: _onCreate);
+    } catch (e) {
+      print("Erro ao inicializar o banco de dados: $e");
+      rethrow;
+    }
   }
 
+  // Cria a tabela 'RegisterUser' no banco de dados
   void _onCreate(Database db, int version) async {
     await db.execute('''
       CREATE TABLE RegisterUser (
@@ -64,29 +76,53 @@ class DbHelper {
     ''');
   }
 
+  // Insere um novo registro no banco de dados
   Future<int> insert(Map<String, dynamic> row) async {
-    Database db = await database;
-    return await db.insert('RegisterUser', row);
+    try {
+      Database db = await database;
+      return await db.insert('RegisterUser', row);
+    } catch (e) {
+      print("Erro ao inserir registro: $e");
+      rethrow;
+    }
   }
 
+  // Consulta todos os registros da tabela
   Future<List<Map<String, dynamic>>> queryAllRows() async {
-    Database db = await database;
-    return await db.query('RegisterUser');
+    try {
+      Database db = await database;
+      return await db.query('RegisterUser');
+    } catch (e) {
+      print("Erro ao consultar registros: $e");
+      rethrow;
+    }
   }
 
+  // Atualiza um registro existente no banco de dados
   Future<int> update(Map<String, dynamic> row) async {
-    Database db = await database;
-    int id = row['id'];
-    return await db
-        .update('RegisterUser', row, where: 'id = ?', whereArgs: [id]);
+    try {
+      Database db = await database;
+      int id = row['id'];
+      return await db.update('RegisterUser', row, where: 'id = ?', whereArgs: [id]);
+    } catch (e) {
+      print("Erro ao atualizar registro: $e");
+      rethrow;
+    }
   }
 
+  // Exclui um registro do banco de dados
   Future<int> delete(int id) async {
-    Database db = await database;
-    return await db.delete('RegisterUser', where: 'id = ?', whereArgs: [id]);
+    try {
+      Database db = await database;
+      return await db.delete('RegisterUser', where: 'id = ?', whereArgs: [id]);
+    } catch (e) {
+      print("Erro ao excluir registro: $e");
+      rethrow;
+    }
   }
 }
 
+// Função para adicionar valores no banco de dados
 Future<void> adicionarValores(
     String nome, String idade, String cpf, String email, String senha) async {
   if (nome.isNotEmpty &&
@@ -94,10 +130,14 @@ Future<void> adicionarValores(
       cpf.isNotEmpty &&
       email.isNotEmpty &&
       senha.isNotEmpty) {
-    final valorModel =
-        ValorModel(nome: nome, idade: idade, cpf: cpf, email: email, senha: senha);
+    final valorModel = ValorModel(
+        nome: nome, idade: idade, cpf: cpf, email: email, senha: senha);
     final dbHelper = DbHelper();
-    await dbHelper.insert(valorModel.toMap());
+    try {
+      await dbHelper.insert(valorModel.toMap());
+    } catch (e) {
+      print("Erro ao adicionar valores: $e");
+    }
   } else {
     print("Todos os campos são obrigatórios.");
   }

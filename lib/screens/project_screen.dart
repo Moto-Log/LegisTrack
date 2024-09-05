@@ -29,13 +29,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
     // Carregar a lista de projetos de lei da API da Câmara - Bugado no momento
     final response = await http.get(Uri.parse('https://dadosabertos.camara.leg.br/api/v2/proposicoes/${widget._propositionId}'));
     final jsonData = jsonDecode(response.body);
-    if (jsonData.containsKey('dados')) {
-      var data = jsonData['dados'];
-      _project = Project.fromJson(data);
-      setState(() {});
-    } else {
-      print('API response does not contain "dados" key');
-    }
+    var data = jsonData['dados'];
+    _project = Project.fromJson(data);
+    setState(() {});
   }
   // @override
   // Widget build(BuildContext context) {

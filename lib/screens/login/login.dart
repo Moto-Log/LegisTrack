@@ -30,21 +30,27 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _login() async {
-    // Aqui vai sua lógica de validação de login
-    if (_controllerEmail.text == "teste@exemplo.com" && _controllerSenha.text == "123456") {
-      final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
+    
+    // Obtém os dados de login armazenados
+    final storedEmail = prefs.getString('userEmail');
+    final storedPassword = prefs.getString('userPassword');
+    
+    // Verifica se o e-mail e senha inseridos coincidem com os armazenados
+    if (_controllerEmail.text == storedEmail && _controllerSenha.text == storedPassword) {
       await prefs.setBool('isLoggedIn', true); // Define que o usuário está logado
       await prefs.setString('userEmail', _controllerEmail.text); // Salva o e-mail do usuário
       await prefs.setString('userName', "Nome do Usuário"); // Exemplo de nome de usuário
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const ProjectsScreen()));
+        context,
+        MaterialPageRoute(builder: (context) => const ProjectsScreen()),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Credenciais inválidas')),
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

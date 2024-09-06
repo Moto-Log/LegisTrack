@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:legistrack/screens/login/login.dart'; // Importa a tela de login para redirecionar ao deslogar
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -46,6 +47,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  // Função de logout
+  Future<void> _logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false); // Marca o usuário como deslogado
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const LoginPage()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,6 +72,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 });
               }
             },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout, // Botão de logout
           ),
         ],
       ),
